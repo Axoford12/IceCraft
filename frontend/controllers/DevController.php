@@ -35,7 +35,7 @@ class DevController extends Controller
         $this->api = new \MulticraftAPI($params['url'],$params['user'],$params['key']);
         return parent::beforeAction($action);
     }
-    public function test(){
+    public function actionTest(){
 
     }
 }

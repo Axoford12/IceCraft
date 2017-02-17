@@ -11,4 +11,8 @@ return [
     'Login' => '登录',
     'Ice Craft' => 'IceCraft',
     'About' => '关于',
+    'Web Page Title - index' => 'Ice Craft - 主页',
+    'License info' => 'Copyright Axoford12 '.date('Y'),
+    'Support' => 'Axoford12',
+
 ];
