@@ -9,6 +9,7 @@ namespace frontend\controllers;
 
 
 use app\models\KeyGeneratorForm;
+use common\models\User;
 use yii\base\Controller;
 
 class AdminController extends Controller
@@ -25,14 +26,27 @@ class AdminController extends Controller
         return parent::beforeAction($action);
     }
     public function actionCreateKey(){
+        // Get data mod
+        // 获得数据模型
         $model = new KeyGeneratorForm();
         if($model->load(\Yii::$app->request->post()) && $model->validate()){
+            // Get url request and validate
+            // sql
+            // 获取得到的数据并使其经过验证器
             if($model->generateKey()){
+                // 生成key成功后渲染页面
                 $num = $model->num;
                 return $this->render('keyCreatedSucceed',['num' => $num]);
             }
         }
         return $this->render('keyCreatorForm',['model' => $model]);
+    }
+
+    public function actionUserList(){
+        // 在admin页面查看用户列表
+        // Get user list in admin
+
+
     }
 
 
