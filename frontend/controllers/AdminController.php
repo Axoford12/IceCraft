@@ -42,12 +42,12 @@ class AdminController extends Controller
         return $this->render('keyCreatorForm',['model' => $model]);
     }
 
-    public function actionUserList(){
-        // 在admin页面查看用户列表
-        // Get user list in admin
-
-
-    }
+   public function actionServerCreate(){
+        // 创建服务器 仅创建与面板数据库
+       // Create server
+       // In this panel database only
+       
+   }
 
 
 }

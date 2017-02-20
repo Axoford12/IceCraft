@@ -41,7 +41,8 @@ class UserListForm extends Model
         ];
     }
 
+
     public function getTypes(){
-        // todo 实现这个方法 Implement this function
+
     }
 }
