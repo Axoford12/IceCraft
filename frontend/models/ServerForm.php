@@ -42,6 +42,13 @@ class ServerForm extends Model
     public $time;
 
     /**
+     * @var $name
+     * name of this server .
+     *
+     */
+    public $name;
+
+    /**
      * @return array
      * return an array of some rules
      * These rules may be a good func to avoid sql shoots...
@@ -50,9 +57,28 @@ class ServerForm extends Model
     public function rules()
     {
         return [
-            ['owner','integer'],// Owner is an id so must be int.
-            ['time','integer']// Time data must be a UNIX time so int.
+            ['owner', 'integer'],// Owner is an id so must be int.
+            ['time', 'integer']// Time data must be a UNIX time so int.
         ];
     }
+
+    /**
+     * @param $api
+     * This is a param of multicraft api connection.
+     * It will be called in next turn
+     * To create server in database and multcraft.
+     * Use multicraft api
+     */
+    public function createServer($api)
+    {
+        $model = new Server();
+        $model->insert(true,[
+            'id' => null,
+            'name' => $this->name,
+            'time' => $this->time,
+            'owner' => $this->owner
+        ]);
+    }
+
 
 }

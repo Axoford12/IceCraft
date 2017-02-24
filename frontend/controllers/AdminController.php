@@ -9,10 +9,11 @@ namespace frontend\controllers;
 
 
 use app\models\KeyGeneratorForm;
+use app\models\ServerModel;
 use common\models\User;
 use yii\base\Controller;
 
-class AdminController extends Controller
+class AdminController extends ApiUsedBaseController
 {
 
     public function beforeAction($action)
@@ -47,6 +48,12 @@ class AdminController extends Controller
        // Create server
        // In this panel database only
        
+   }
+
+   public function actionSyncServer(){
+       $model = new ServerModel();
+       $model->api = $this->api;
+       print_r($model->syncServer());
    }
 
 

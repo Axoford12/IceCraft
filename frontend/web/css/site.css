@@ -119,6 +119,5 @@ a.desc:after {
     outline: none;
 }
 .navbar-inverse {
-    background-color: #00b3ee;
-    border-color: #080808;
+    background-color: #000;
 }
