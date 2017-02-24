@@ -46,7 +46,6 @@ class ServerModel extends Model
                 ->batchInsert('server', ['id', 'time', 'owner', 'name'], $rows)
                 ->execute();
         } elseif ($action == self::ACTION_IMPORT_FROM_LOCAL) {
-            $model = new Server();
             $data = Server::find()->asArray()->all();
             foreach ($data as $datum) {
                 try {
