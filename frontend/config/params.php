@@ -13,7 +13,10 @@ return [
         // 在此处填写你的api key  它会在multicraft中生成
         // Enter your api key here
         // It will be generate in your multicraft
-        'key' => ''
+        'key' => '',
+
+        // 在这里设置每个服务器的初始创建人数
+        'playerNum' => 10,
     ]
 
 ];
