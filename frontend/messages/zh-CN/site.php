@@ -20,5 +20,6 @@ return [
     'key Creator' => '激活码生成器',
     'over max' => '超出大小',
     'succeeded create key' => '成功',
-    'Created number' => '创建了'
+    'Created number' => '创建了',
+    'Cannot get server list :' => '不能获取到服务器列表 错误信息 :'
 ];

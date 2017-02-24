@@ -50,10 +50,11 @@ class AdminController extends ApiUsedBaseController
        
    }
 
-   public function actionSyncServer(){
+   public function actionImport(){
+       $action = intval(\Yii::$app->request->get('action','0'));
        $model = new ServerModel();
        $model->api = $this->api;
-       print_r($model->syncServer());
+       print_r($model->import($action));
    }
 
 

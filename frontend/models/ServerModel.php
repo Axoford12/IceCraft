@@ -8,26 +8,64 @@
 namespace app\models;
 
 
+use yii\base\Exception;
 use yii\base\Model;
 
 class ServerModel extends Model
 {
+    const ACTION_IMPORT_FROM_MULTICRAFT = 1;
+    const ACTION_IMPORT_FROM_LOCAL = 2;
     public $api;
 
     /**
+     * @param $action
+     * @return bool
+     * @throws Exception
      * This function will sync server with Multicraft Panel and Local Database.
      */
-    public function syncServer(){
+    public function import($action){
+        if($action == 0){
+            throw new Exception('Miss param:action');
+        }elseif($action == self::ACTION_IMPORT_FROM_MULTICRAFT){
+            $result = [];
 
-        return $this->_getServerListInMulticraft();
+            $data = $this->_getApiAnswer('listServers')['Servers'];
+            foreach ($data as $id => $item) {
+                $one = $this->_getApiAnswer('getServer',$id)['Server'];
+                $one['owner'] = $this->_getApiAnswer('getServerOwner',$id)['user_id'];
+                $result[] = $one;
+            }
+            foreach ($result as $item) {
+                $rows[] = [$item['id'],time()+36000,$item['owner'],$item['name']];
+
+            }
+            Server::deleteAll();
+            \Yii::$app->db
+                ->createCommand()
+                ->batchInsert('server',['id','time','owner','name'],$rows)
+                ->execute();
+        }elseif($action == self::ACTION_IMPORT_FROM_LOCAL){
+
+        }
+
+
+        return true;
     }
 
+
     /**
-     * @param $api
-     * api of multicraft.
-     * Get server List in multicraft
+     * function of api
+     * @param $func
+     * @param int $param
+     * @return array
+     * @throws Exception
      */
-    private function _getServerListInMulticraft(){
-        return $this->api->listServers();
+    private function _getApiAnswer($func,$param = 0){
+        $data = $this->api->$func($param);
+        if($data['success']){
+            return $data['data'];
+        } else {
+            throw new Exception(\Yii::t('site','Cannot get server list :').$data['errors'][0]);
+        }
     }
 }
