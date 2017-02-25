@@ -10,11 +10,11 @@ require_once '../runtime/requirements/MulticraftAPI.php';
 
 use yii\base\Controller;
 
-class ApiUsedBaseController extends Controller
+abstract class ApiUsedBaseController extends Controller
 {
     public $api;
 
-    public function beforeAction($action)
+    function beforeAction($action)
     {
         if(!isset(\Yii::$app->params['apiConn'])){
             // Throw exception when there is no config found

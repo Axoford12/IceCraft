@@ -36,9 +36,9 @@ class ServerModel extends Model
                 $one['owner'] = $this->_getApiAnswer('getServerOwner', $id)['user_id'];
                 $result[] = $one;
             }
+            $rows = [];
             foreach ($result as $item) {
                 $rows[] = [$item['id'], time() + 36000, $item['owner'], $item['name']];
-
             }
             Server::deleteAll();
             \Yii::$app->db
@@ -55,12 +55,14 @@ class ServerModel extends Model
 
 
                     $result = $this->api->createServer($datum['name'],0,'', 10);
+
                     if($result['success']){
+                        $serverInfo = $this->_getApiAnswer('getServer',$result['data']['id'])['Server'];
                         $model = Server::findOne(['id' => $datum['id']]);
-                        $model->id = $result['data']['id'];
-                        $model->name = $datum['name'];
-                        $model->owner = $datum['owner'];
-                        $model->time = $datum['time'];
+                        $model->id = $serverInfo['id'];
+                        $model->is_supp = $serverInfo['suspended'];
+                        $model->port = $serverInfo['port'];
+                        $model->time = strtotime(\Yii::$app->params['IceConfig']['time']);
                         $model->update();
                     }
 

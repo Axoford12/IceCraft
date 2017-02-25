@@ -16,7 +16,12 @@ return [
         'key' => '',
 
         // 在这里设置每个服务器的初始创建人数
+
+    ],
+    'IceConfig' => [
         'playerNum' => 10,
+
+        'time' => '+1 month'
     ]
 
 ];
