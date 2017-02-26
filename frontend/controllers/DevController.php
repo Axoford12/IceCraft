@@ -8,14 +8,15 @@
 namespace frontend\controllers;
 
 
-use app\models\ApiModel;
+use common\models\User;
+use yii\base\Controller;
 
-class DevController extends ApiUsedBaseController
+class DevController extends Controller
 {
     public function actionDev(){
 
-        $model = new ApiModel($this->api);
-        print_r($model->getServer(4));
+        $model = new User();
+        print_r($model->setOwnerFromMu());
     }
 
 }

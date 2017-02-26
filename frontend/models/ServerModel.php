@@ -8,6 +8,7 @@
 namespace app\models;
 
 
+use common\models\ApiUsedTrait;
 use yii\base\Exception;
 use yii\base\Model;
 
@@ -16,6 +17,7 @@ class ServerModel extends Model
     const ACTION_IMPORT_FROM_MULTICRAFT = 1;
     const ACTION_IMPORT_FROM_LOCAL = 2;
     public $api_model;
+    use ApiUsedTrait;
 
     /**
      * @param $action
@@ -25,15 +27,16 @@ class ServerModel extends Model
      */
     public function import($action)
     {
+        
         if (!$action) {
             throw new Exception('Miss param:action');
         } elseif ($action == self::ACTION_IMPORT_FROM_MULTICRAFT) {
             $result = [];
 
-            $data = $this->api_model->listServers['Servers'];
+            $data = $this->listServers['Servers'];
             foreach ($data as $id => $item) {
-                $one = $this->api_model->getServer($id)['Server'];
-                $one['owner'] = $this->api_model->getServerOwner($id)['user_id'];
+                $one = $this->getServer($id)['Server'];
+                $one['owner'] = $this->getServerOwner($id)['user_id'];
                 $result[] = $one;
             }
             $rows = [];
@@ -49,13 +52,13 @@ class ServerModel extends Model
             $data = Server::find()->asArray()->all();
             foreach ($data as $datum) {
                 try {
-                    $this->api_model->getServer( $datum['id']);
+                    $this->getServer( $datum['id']);
                 } catch (Exception $e) {
 
-                    $result = $this->api_model->createServer($datum['name'],0,'', 10);
+                    $result = $this->createServer($datum['name'],0,'', 10);
 
                     if($result['success']){
-                        $serverInfo = $this->api_model->getServer($result['data']['id'])['Server'];
+                        $serverInfo = $this->getServer($result['data']['id'])['Server'];
                         $model = Server::findOne(['id' => $datum['id']]);
                         $model->id = $serverInfo['id'];
                         $model->is_supp = $serverInfo['suspended'];

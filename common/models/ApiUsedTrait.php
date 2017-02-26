@@ -1,17 +1,16 @@
 <?php
 /**
  * User: Axoford12
- * Date: 2/25/2017
- * Time: 11:47 PM
+ * Date: 2/27/2017
+ * Time: 12:17 AM
  */
 
-namespace app\models;
-
+namespace common\models;
+require_once '../../frontend/runtime/requirements/MulticraftAPI.php';
 
 use yii\base\Exception;
-use yii\base\Model;
 
-class ApiModel extends Model
+trait ApiUsedTrait
 {
 
     /**
@@ -20,11 +19,6 @@ class ApiModel extends Model
      */
     public $api;
 
-    public function __construct($api,array $config = [])
-    {
-        $this->api = $api;
-        parent::__construct($config);
-    }
 
     /**
      * 获取成功的返回值，如果为success为true则返回data
@@ -54,8 +48,29 @@ class ApiModel extends Model
      */
     public function __call($name, $params)
     {
+        $this->api = $this->_getApi();
         return $this->_getSuccessInfo($this->api->__call($name,$params));
     }
 
+    /**
+     * @return object 返回Multicraft API对象
+     * @throws Exception 当获取不到配置文件时抛出异常
+     */
+    private function _getApi(){
+        if(!isset(\Yii::$app->params['apiConn'])){
+            // Throw exception when there is no config found
+            // 在没有找到配置文件是抛出异常 .
+            throw new Exception(\Yii::t('site','Can not find Api connection information.'));
+        }
+        $params = \Yii::$app->params['apiConn'];
 
+        // Get Params from params.php
+        // 从  params 文件提出一些param参数
+
+        // new A multicraft api connect.
+        // set params
+        // 开始加载一个api链接，连接到Muticraft的api接口
+        // 设置参数为从配置文件读取到的参数
+        return new \MulticraftAPI($params['url'],$params['user'],$params['key']);
+    }
 }
