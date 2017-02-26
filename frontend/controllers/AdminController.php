@@ -8,6 +8,7 @@
 namespace frontend\controllers;
 
 
+use app\models\ApiModel;
 use app\models\KeyGeneratorForm;
 use app\models\ServerModel;
 use common\models\User;
