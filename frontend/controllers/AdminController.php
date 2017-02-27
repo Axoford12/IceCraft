@@ -7,14 +7,11 @@
 
 namespace frontend\controllers;
 
-
-use app\models\ApiModel;
 use app\models\KeyGeneratorForm;
 use app\models\ServerModel;
-use common\models\User;
 use yii\base\Controller;
 
-class AdminController extends ApiUsedBaseController
+class AdminController extends Controller
 {
 
     public function beforeAction($action)
