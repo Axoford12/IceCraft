@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -29,6 +30,7 @@ class User extends ActiveRecord implements IdentityInterface
 
 
     use ApiUsedTrait;
+
     /**
      * @inheritdoc
      */
@@ -115,7 +117,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -193,23 +195,23 @@ class User extends ActiveRecord implements IdentityInterface
      * 从multicraft处同步用户信息到本地数据库。
      * @return mixed
      */
-    public function syncOwnersFromMu(){
-        $users['Users'] = $this->listUsers();
-        $local_users = User::find()->select(['id','owner_id','username','email'])->asArray()->all();
+    public function syncOwnersFromMu()
+    {
+        $users = $this->listUsers()['Users'];
+        $local_users = User::find()->select(['id', 'owner_id', 'username', 'email'])->asArray()->all();
         foreach ($local_users as $k => $user) {
-            if(!in_array($local_users[$k]['owner_id'],$users)){
+            if (!in_array($local_users[$k]['owner_id'], $users)) {
                 // 没在本地数据库找到
                 // ----------
 
                 // 给Mu 创建用户
 
-
-
-                if($owner_id = $this->createUser($local_users[$k]['username'],$local_users[$k]['email'], Yii::$app->security->generateRandomString())){
+                $owner_id = ($this->createUser($local_users[$k]['username'],
+                    $local_users[$k]['email'],
+                    Yii::$app->security->generateRandomString()));
+                if ($owner_id) {
                     // 创建用户成功以后更新数据库的owner_id
-                    $user = User::find()->where(['owner_id' => $local_users[$k]['owner_id']])->one();
-                    $user->owner_id = $owner_id;
-                    $user->save();
+                    Yii::$app->db->createCommand()->update('user', ['owner_id' => $owner_id['id']])->execute();
                 } else {
                     return false;
                 }

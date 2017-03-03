@@ -8,15 +8,17 @@
 namespace frontend\controllers;
 
 
+use common\models\ApiUsedTrait;
 use common\models\User;
 use yii\base\Controller;
 
 class DevController extends Controller
 {
+    use ApiUsedTrait;
     public function actionDev(){
 
         $model = new User();
-        print_r($model->syncOwnersFromMu());
+        $model->syncOwnersFromMu();
     }
 
 }
