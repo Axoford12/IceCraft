@@ -57,8 +57,8 @@ class ServerModel extends Model
 
                     $result = $this->createServer($datum['name'],0,'', 10);
 
-                    if($result['success']){
-                        $serverInfo = $this->getServer($result['data']['id'])['Server'];
+                    if($result){
+                        $serverInfo = $this->getServer($result['id'])['Server'];
                         $model = Server::findOne(['id' => $datum['id']]);
                         $model->id = $serverInfo['id'];
                         $model->is_supp = $serverInfo['suspended'];
