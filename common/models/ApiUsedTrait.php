@@ -28,15 +28,16 @@ trait ApiUsedTrait
      * @return mixed
      * 当api调用成功时返回data数组
      * @throws Exception
-     * api调用失败时抛出异常。
+     * api调用失败时返回false.。
      */
-    private function _getSuccessInfo($api_answer){
-        if($api_answer['success']){
+    private function _getSuccessInfo($api_answer)
+    {
+        if ($api_answer['success']) {
             // 请求调用成功
             return $api_answer['data'];
         } else {
 
-            throw new Exception(\Yii::t('site', 'Cannot get api data:') . $api_answer['errors'][0]);
+            return false;
         }
     }
 
@@ -49,18 +50,20 @@ trait ApiUsedTrait
     public function __call($name, $params)
     {
         $this->api = $this->_getApi();
-        return $this->_getSuccessInfo($this->api->__call($name,$params));
+        $result = $this->_getSuccessInfo($this->api->__call($name, $params));
+        return $result;
     }
 
     /**
      * @return object 返回Multicraft API对象
      * @throws Exception 当获取不到配置文件时抛出异常
      */
-    private function _getApi(){
-        if(!isset(\Yii::$app->params['apiConn'])){
+    private function _getApi()
+    {
+        if (!isset(\Yii::$app->params['apiConn'])) {
             // Throw exception when there is no config found
             // 在没有找到配置文件是抛出异常 .
-            throw new Exception(\Yii::t('site','Can not find Api connection information.'));
+            throw new Exception(\Yii::t('site', 'Can not find Api connection information.'));
         }
         $params = \Yii::$app->params['apiConn'];
 
@@ -71,6 +74,6 @@ trait ApiUsedTrait
         // set params
         // 开始加载一个api链接，连接到Muticraft的api接口
         // 设置参数为从配置文件读取到的参数
-        return new \MulticraftAPI($params['url'],$params['user'],$params['key']);
+        return new \MulticraftAPI($params['url'], $params['user'], $params['key']);
     }
 }
