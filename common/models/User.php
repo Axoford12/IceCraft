@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use app\models\Server;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -190,10 +191,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+    public function getServer(){
+        return $this->hasMany(Server::className(),['owner' => 'owner_id']);
+    }
 
     /**
      * 从multicraft处同步用户信息到本地数据库。
-     * @return mixed
+     * @return boolean
      */
     public function syncOwnersFromMu()
     {
@@ -219,6 +223,14 @@ class User extends ActiveRecord implements IdentityInterface
             }
         }
         return true;
+    }
+
+    public function getUserOwnedServer($id){
+        return User::find()
+            ->select(['id','username','owner_id'])
+            ->with('server')
+            ->where(['id' => $id])
+            ->asArray()->one();
     }
 
 }

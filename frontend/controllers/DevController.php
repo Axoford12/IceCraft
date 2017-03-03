@@ -18,7 +18,7 @@ class DevController extends Controller
     public function actionDev(){
 
         $model = new User();
-        $model->syncOwnersFromMu();
+        print_r($model->getUserOwnedServer(1));
     }
 
 }
