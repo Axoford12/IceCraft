@@ -42,6 +42,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => Yii::t('site','Signup'), 'url' => ['/site/signup']];
         $menuItems[] = ['label' => Yii::t('site','Login'), 'url' => ['/site/login']];
     } else {
+        $menuItems[] = ['label' => Yii::t('site','My Server'), 'url' => ['/user/server-list']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
@@ -50,6 +51,7 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>';
+
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -65,7 +67,7 @@ AppAsset::register($this);
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
-</div>
+</div>是
 
 <footer class="footer">
     <div class="container">

@@ -11,7 +11,9 @@ return [
     'Login' => '登录',
     'Ice Craft' => 'IceCraft服务器管理系统',
     'About' => '关于',
+    // Index的标题
     'Web Page Title - index' => 'Ice Craft - 主页',
+    // 首页下面的授权信息
     'License info' => 'Copyright Axoford12 '.date('Y'),
     'Support' => 'Axoford12',
     'cannot be blank' => '不能为空',
