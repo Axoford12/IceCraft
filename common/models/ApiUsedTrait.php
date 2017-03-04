@@ -6,7 +6,7 @@
  */
 
 namespace common\models;
-require_once '../../frontend/runtime/requirements/MulticraftAPI.php';
+require_once '../../frontend/requirements/MulticraftAPI.php';
 
 use yii\base\Exception;
 
