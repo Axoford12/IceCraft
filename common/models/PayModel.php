@@ -6,9 +6,10 @@
  */
 
 namespace common\models;
-
+include_once '../../frontend/requirements/Fpay.php';
 
 use yii\base\Model;
+use yii\helpers\Url;
 
 /**
  * Class PayModel
@@ -59,6 +60,7 @@ class PayModel extends Model
      */
     private $partner;
 
+
     // ---参数定义完成---
     //
     //
@@ -85,15 +87,6 @@ class PayModel extends Model
         parent::__construct($config);
     }
 
-    /**
-     * @param $data
-     * @return string
-     */
-    private function _base64url_decode($data)
-    {
-        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
-    }
-
 
     /**
      * @return bool
@@ -101,13 +94,10 @@ class PayModel extends Model
      */
     private function _returnFunc()
     {
-        $decode = $this->_base64url_decode($this->sign);
-        $pu_key = openssl_pkey_get_public($this->rsakey);
-
-        openssl_public_decrypt($decode, $design, $pu_key);
-        $signde = explode('|', $design);
-        if ($signde[1] === $this->shno) {
-            return true;
+        $fpay = self::getFpay();
+        if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
+            && $fpay->getUserPayStatus($this->shno)) {
+            return 'success';
         } else {
             return false;
         }
@@ -119,12 +109,9 @@ class PayModel extends Model
      */
     private function _notifyFunc()
     {
-        $decode = $this->_base64url_decode($this->sign);
-        $pu_key = openssl_pkey_get_public($this->rsakey);
-        openssl_public_decrypt($decode, $design, $pu_key);
-        $signde = explode('|', $design);
-
-        if ($signde[1] === $this->shno) {
+        $fpay = self::getFpay();
+        if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
+            && $fpay->getUserPayStatus($this->shno)) {
             return 'success';
         } else {
             return false;
@@ -144,5 +131,32 @@ class PayModel extends Model
             return $this->_returnFunc();
         }
         return false;
+    }
+
+    /**
+     * @return \Fpay
+     * 返回Fpay对象
+     */
+    public static function getFpay(){
+        $partner = \Yii::$app->params['Fpay']['partner'];
+        $rsakey = \Yii::$app->params['Fpay']['rsakey'];
+        $fpay = new \Fpay($partner,$rsakey);
+        return $fpay;
+    }
+    /**
+     * @param $money integer
+     * @param $return_url string
+     * 用户返回地址
+     * @param $notify_url string
+     * 异步返回地址
+     *
+     * 本次付款所要求的钱数
+     */
+    public function startPay($money,$return_url,$notify_url){
+        $web_root = \Yii::$app->params['IceConfig']['webRoot'];
+        self::getFpay()->toPayByUser($money,
+            $web_root . Url::to([$return_url]),
+            $web_root . Url::to([$notify_url]),'pay_by_user');
+
     }
 }
