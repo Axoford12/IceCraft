@@ -6,11 +6,14 @@
  */
 
 namespace frontend\controllers;
+use common\models\PayModel;
 use yii\base\Controller;
 class DevController extends Controller
 {
     public function actionDev(){
 
+        $model = new PayModel();
+        $model->startPay(0.01,'pay/return','pay/notify');
     }
 
 }

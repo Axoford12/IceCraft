@@ -149,14 +149,16 @@ class PayModel extends Model
      * 用户返回地址
      * @param $notify_url string
      * 异步返回地址
-     *
+     * @return array
+     * 数据数组
      * 本次付款所要求的钱数
      */
     public function startPay($money,$return_url,$notify_url){
         $web_root = \Yii::$app->params['IceConfig']['webRoot'];
-        self::getFpay()->toPayByUser($money,
+        $data = self::getFpay()->toPayByUser($money,
             $web_root . Url::to([$return_url]),
             $web_root . Url::to([$notify_url]),'pay_by_user');
 
+        return $data;
     }
 }

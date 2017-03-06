@@ -41,6 +41,8 @@ class Fpay
      * 异步地址
      * @param $type
      * 类型
+     * @return array
+     * 返回数据数组
      */
     public function toPayByUser($money, $return_url, $notify_url, $type)
     {
@@ -48,12 +50,15 @@ class Fpay
         $pu_key = openssl_pkey_get_public($this->rsakey);
         $sign = $money . '|' . $rand . '|' . $return_url . '|' . $notify_url;
         openssl_public_encrypt($sign, $ensign, $pu_key);//公钥加密
-        header('Location: https://pay.mcpe.cc/Gateway.do?'
+        $pay_address = 'https://pay.mcpe.cc/Gateway.do?'
             . 'partner=' . $this->partner
             . '&money=' . $money
             . '&shno=' . $rand
             . '&sign=' . base64url_encode($ensign)
-            . '&type=' . $type);
+            . '&type=' . $type;
+        $data = ['shno' => $rand,'payAddress' => $pay_address];
+
+        return $data;
     }
 
     /**
