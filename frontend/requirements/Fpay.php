@@ -56,7 +56,7 @@ class Fpay
             . '&shno=' . $rand
             . '&sign=' . base64url_encode($ensign)
             . '&type=' . $type;
-        $data = ['shno' => $rand,'payAddress' => $pay_address];
+        $data = ['shno' => $rand,'pay_address' => $pay_address];
 
         return $data;
     }

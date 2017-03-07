@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\DepositForm;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -185,5 +186,23 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @return string
+     * 渲染页面
+     */
+    public function actionDeposit(){
+        if(Yii::$app->user->isGuest){
+            //如果用户未登陆，则重定向到登陆页面
+            Yii::$app->response->redirect([ 'site/login']);
+        }
+        $model = new DepositForm();// 创建对象模型
+        if ($model->load(Yii::$app->request->post()) && $model->validate()){
+
+            // 展开一项付款业务请求
+            $model->startPay(\Yii::$app->user->id);
+        }
+        return $this->render('deposit' , ['deposit' => $model]);
     }
 }

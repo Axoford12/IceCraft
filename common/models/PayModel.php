@@ -161,4 +161,12 @@ class PayModel extends Model
 
         return $data;
     }
+
+
+    /**
+     * 设计为用户充值成功后调用。
+     */
+    public function afterPay(){
+
+    }
 }
