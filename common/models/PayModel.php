@@ -69,16 +69,6 @@ class PayModel extends Model
     // ---------------
 
     /**
-     * 从配置文件读取Fpay的信息
-     */
-    private function _getFpay()
-    {
-        $this->partner = \Yii::$app->params['Fpay']['partner'];
-        $this->rsakey = \Yii::$app->params['Fpay']['rsakey'];
-    }
-
-
-    /**
      * 构造方法
      * @param array $config
      */
@@ -88,69 +78,11 @@ class PayModel extends Model
         parent::__construct($config);
     }
 
-
-    /**
-     * @return bool
-     * 返回用户直接重定向页面的验证成功与否
-     */
-    private function _returnFunc()
-    {
-        $fpay = self::getFpay();
-        if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
-            && $fpay->getUserPayStatus($this->shno)) {
-            return 'success';
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return bool|string
-     * 返回付款成功后的成功与否
-     */
-    private function _notifyFunc()
-    {
-        $fpay = self::getFpay();
-        if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
-            && $fpay->getUserPayStatus($this->shno)) {
-            $order = Order::find()
-                ->select(['id','user_id','money','status'])
-                ->where(['id' => $this->shno])
-                ->one();
-            if(!($order->status)){
-                $order->status = 1;
-                $order->save();
-                $user = User::findOne($order['user_id']);
-                $user->money = $user->money + $order['money'];
-                $user->save();
-            }
-
-            return 'success';
-        } else {
-            return false;
-        }
-
-    }
-
-    /**
-     * @param $action
-     * @return bool|string
-     * 获取订单状态
-     */
-    public function getStatus($action){
-        if($action == 'notify'){
-            return $this->_notifyFunc();
-        } else if ($action == 'return'){
-            return $this->_returnFunc();
-        }
-        return false;
-    }
-
     /**
      * @return \Fpay
      * 返回Fpay对象
      */
-    public static function getFpay(){
+    private static function _getFpay(){
         $partner = \Yii::$app->params['Fpay']['partner'];
         $rsakey = \Yii::$app->params['Fpay']['rsakey'];
         $fpay = new \Fpay($partner,$rsakey);
@@ -167,7 +99,7 @@ class PayModel extends Model
      * 本次付款所要求的钱数
      */
     public function startPay($money,$return_url,$notify_url){
-        $data = self::getFpay()->toPayByUser($money,
+        $data = self::_getFpay()->toPayByUser($money,
             $return_url,
             $notify_url,'pay_by_user');
 
@@ -180,5 +112,41 @@ class PayModel extends Model
      */
     public function afterPay(){
 
+    }
+
+    /**
+     * @return bool
+     * 返回操作是否成功和有效
+     */
+    private function _deposit(){
+        $fpay = self::_getFpay();
+        if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
+            && $fpay->getUserPayStatus($this->shno)) {
+            // 检查有关pay参数
+
+
+            $order = Order::find()
+                ->select(['id','user_id','money','status'])
+                ->where(['id' => $this->shno])
+                ->one();// 从数据库中找到一条能和此订单匹配的记录
+            // 从数据库中找到的数据进行如下操作
+
+            if(!($order->status)){
+                // 订单未被处理过，即用户已付款但金额未到账
+
+                // 将状态设置为已处理
+                $order->status = 1;
+                $order->save();// 使用活动记录保存修改
+                $user = User::findOne($order['user_id']);// 根据User Id找到订单的对应用户
+                $user->money = $user->money + $order['money'];
+                // 为用户进行充值
+                $user->save();//保存数据记录
+            }
+
+            return true;// 充值成功 返回true
+        } else {
+            // 用户可能是重复调用了这个接口 ，返回失败状态。
+            return false;
+        }
     }
 }
