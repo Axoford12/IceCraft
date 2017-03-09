@@ -10,6 +10,8 @@ use Yii;
  * @property string $id
  * @property integer $user_id
  * @property integer $status
+ * @property integer $money
+ *
  */
 class Order extends \yii\db\ActiveRecord
 {

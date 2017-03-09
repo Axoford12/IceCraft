@@ -31,7 +31,7 @@ class DepositForm extends Model
      * @return integer
      */
     public function getMoney($money){
-        return $money;
+        return 0.01;
     }
     public function attributeLabels()
     {
@@ -51,11 +51,12 @@ class DepositForm extends Model
         $model = new PayModel();
         $web_root = \Yii::$app->params['IceConfig']['webRoot'];
         $pay_data = $model->startPay($this->getMoney($this->money),
-            $web_root.Url::to(['pay/return']), $web_root.Url::to(['pay/notify']));//发起支付
+            Url::to(['pay/return'],true), Url::to(['pay/notify'],true));//发起支付
         $order = new Order();
         $order->id = $pay_data['shno'];
         $order->user_id = $user_id;
         $order->status = 0;
+        $order->money = $this->money;
         $order->save();
         //重定向到付款页面
         \Yii::$app->response->redirect($pay_data['pay_address']);

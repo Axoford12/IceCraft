@@ -8,6 +8,7 @@
 namespace common\models;
 include_once '../../frontend/requirements/Fpay.php';
 
+use app\models\Order;
 use yii\base\Model;
 use yii\helpers\Url;
 
@@ -112,6 +113,18 @@ class PayModel extends Model
         $fpay = self::getFpay();
         if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
             && $fpay->getUserPayStatus($this->shno)) {
+            $order = Order::find()
+                ->select(['id','user_id','money','status'])
+                ->where(['id' => $this->shno])
+                ->one();
+            if(!($order->status)){
+                $order->status = 1;
+                $order->save();
+                $user = User::findOne($order['user_id']);
+                $user->money = $user->money + $order['money'];
+                $user->save();
+            }
+
             return 'success';
         } else {
             return false;
@@ -154,10 +167,9 @@ class PayModel extends Model
      * 本次付款所要求的钱数
      */
     public function startPay($money,$return_url,$notify_url){
-        $web_root = \Yii::$app->params['IceConfig']['webRoot'];
         $data = self::getFpay()->toPayByUser($money,
-            $web_root . Url::to([$return_url]),
-            $web_root . Url::to([$notify_url]),'pay_by_user');
+            $return_url,
+            $notify_url,'pay_by_user');
 
         return $data;
     }

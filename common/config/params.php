@@ -29,7 +29,7 @@ return [
         // + 你的域名
         // 可以带上端口 如  http://ficecraft.dev:88
 
-        'webRoot' => 'https://ficecraft.dev',
+        'webRoot' => 'http://icecraft.axoford12.cn:88',
         'time' => '+1 month'
     ],
     'Fpay' => [
