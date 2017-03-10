@@ -35,4 +35,17 @@ return [
     'RememberMe' => '记住我',
     'Incorrect username or password' => '用户名和密码输错了哟～，检查一下吧！^_^',
     // 验证失败的提示
+
+    // 注册表单
+    // --------
+    'Please fill out the following fields to signup:' => '请填写下面的表单来注册～',
+    // 注册页的提示信息
+
+    'This username has already been taken.' => '这个用户名因为长得太萌已经被拿走了哦',
+    'This email address has already been taken.' => '这个邮箱地址已经被带走了哦',
+    // 两个但unique验证器失败时的返回信息。
+
+    'Email' => '电子邮箱'
+
+
 ];
