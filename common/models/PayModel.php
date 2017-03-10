@@ -49,19 +49,8 @@ class PayModel extends Model
      */
     public $shno;
 
-    /**
-     * @var string
-     * RSA公钥
-     */
-    private $rsakey;
 
-    /**
-     * @var int
-     * 合作公钥
-     */
-    private $partner;
-
-
+    public $fcno;
     // ---参数定义完成---
     //
     //
@@ -108,23 +97,14 @@ class PayModel extends Model
 
 
     /**
-     * 设计为用户充值成功后调用。
-     */
-    public function afterPay(){
-
-    }
-
-    /**
      * @return bool
      * 返回操作是否成功和有效
      */
-    private function _deposit(){
+    public function _deposit(){
         $fpay = self::_getFpay();
         if ($fpay->checkReturnData($this->sign,$this->money,$this->shno)
             && $fpay->getUserPayStatus($this->shno)) {
             // 检查有关pay参数
-
-
             $order = Order::find()
                 ->select(['id','user_id','money','status'])
                 ->where(['id' => $this->shno])
@@ -141,6 +121,8 @@ class PayModel extends Model
                 $user->money = $user->money + $order['money'];
                 // 为用户进行充值
                 $user->save();//保存数据记录
+            } else {
+                return false;
             }
 
             return true;// 充值成功 返回true

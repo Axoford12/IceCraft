@@ -1,7 +1,8 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
-    'supportEmail' => 'support@example.com',
+    'adminEmail' => 'postmaster@axoford12.cc',
+    'supportEmail' => 'postmaster@axoford12.cc',
+    // 用户修改密码的时间～
     'user.passwordResetTokenExpire' => 3600,
     'apiConn' => [
         // 在此处填写 api url
@@ -22,20 +23,20 @@ return [
     ],
     'IceConfig' => [
         'playerNum' => 10,
-        // 此处的填写应该不带/
-        // 不要填成   https://ficecraft.dev/
-        // 上面不要填写最后的  /
-        // 格式应该为  http:// 或  https://
-        // + 你的域名
-        // 可以带上端口 如  http://ficecraft.dev:88
 
-        'webRoot' => 'http://icecraft.axoford12.cn:88',
+        // 原先此处的地址程序已经可以自动获得
+        // 不用填写。
+        // 赶快感谢作者  Axoford12 !
+
+
+        // 此处为服务器的开服时间  （准备移除）
         'time' => '+1 month'
     ],
     'Fpay' => [
         // 此处是Fpay 付款的合作id 和  RSA　公钥
         // 欢迎访问  mcpe.cc具体咨询  此付款接口目前正在开发中。
         'partner' => '',
+
         'rsakey' => ''
     ]
 ];

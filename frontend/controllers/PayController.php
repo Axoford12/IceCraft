@@ -6,25 +6,34 @@
  * Time: 6:36 PM
  */
 namespace frontend\controllers;
+
 use common\models\PayModel;
 
 class PayController extends \yii\base\Controller
 {
-    public function actionNotify(){
+    public function actionNotify()
+    {
         $model = new PayModel();
-        if($model->setAttributes(\Yii::$app->request->get()) && $model->validate()){
-            if($model->afterPay()){
+        $data = \Yii::$app->request->get() ? \Yii::$app->request->get() : 0;
+        if ($data) {
+            $model->setAttributes($data);
+            if ($model->_deposit()) {
                 echo 'success';
             }
         }
 
     }
 
-    public function actionReturn(){
+    public function actionReturn()
+    {
         $model = new PayModel();
-        if($model->setAttributes(\Yii::$app->request->get()) && $model->validate()){
-            if($model->afterPay()){
+        $data = \Yii::$app->request->get() ? \Yii::$app->request->get() : 0;
+        if ($data) {
+            $model->setAttributes($data);
+            if ($model->_deposit()) {
                 echo 'success';
+                // 此处暂时写为和 异步请求一样.
+                // 以后会修改为成功后用户的跳转页面。
             }
         }
     }
