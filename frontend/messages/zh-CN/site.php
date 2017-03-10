@@ -23,5 +23,16 @@ return [
     'over max' => '超出大小',
     'succeeded create key' => '成功',
     'Created number' => '创建了',
-    'Cannot get server list :' => '不能获取到服务器列表 错误信息 :'
+    'Cannot get server list :' => '不能获取到服务器列表 错误信息 :',
+    'My Server' => '我的服务器',
+    'Logout' => '注销',
+    // 登录表单
+    'Please fill out the following fields to login:' => '请填写下面的表单登录:',
+    'If you forgot your password you can' => '如果你忘记了密码，你可以使用魔法来',
+    'reset it' => '换个新密码',
+    'Username' => '用户名',
+    'Password' => '密码',
+    'RememberMe' => '记住我',
+    'Incorrect username or password' => '用户名和密码输错了哟～，检查一下吧！^_^',
+    // 验证失败的提示
 ];
