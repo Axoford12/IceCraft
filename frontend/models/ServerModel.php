@@ -76,13 +76,5 @@ class ServerModel extends Model
         return true;
     }
 
-    /**
-     * @param $id int
-     * 需要获得的Server ID
-     */
-    public function getLog($id){
-
-    }
-
 
 }
