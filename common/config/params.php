@@ -22,7 +22,6 @@ return [
 
     ],
     'IceConfig' => [
-        'playerNum' => 10,
 
         // 原先此处的地址程序已经可以自动获得
         // 不用填写。
@@ -30,7 +29,42 @@ return [
 
 
         // 此处为服务器的开服时间  （准备移除）
-        'time' => '+1 month'
+        'plans' => [
+            [
+                'title' => 'Plan 1',
+                'price' => '100',
+                'circle' => 'per month',
+                'feature' => [
+                    [
+                        'num' => 10,
+                        'unit' => 'people',
+                        'name' => 'Players'
+                    ],
+                    [
+                        'num' => 1024,
+                        'unit' => 'Mb',
+                        'name' => 'Memory'
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Plan 1',
+                'price' => '100',
+                'circle' => 'per month',
+                'feature' => [
+                    [
+                        'num' => 10,
+                        'unit' => 'people',
+                        'name' => 'Players'
+                    ],
+                    [
+                        'num' => 1024,
+                        'unit' => 'Mb',
+                        'name' => 'Memory'
+                    ],
+                ]
+            ]
+        ]
     ],
     'Fpay' => [
         // 此处是Fpay 付款的合作id 和  RSA　公钥

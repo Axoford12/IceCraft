@@ -203,4 +203,11 @@ class SiteController extends Controller
         }
         return $this->render('deposit' , ['deposit' => $model]);
     }
+
+    public function actionPrice(){
+        $data = [
+            'plans' => Yii::$app->params['IceConfig']['plans']
+        ];
+        return $this->render('price',['data' => $data]);
+    }
 }
