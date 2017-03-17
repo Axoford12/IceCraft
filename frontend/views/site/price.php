@@ -8,9 +8,13 @@ $this->title = Yii::t('site', 'Price');
 ?>
 <link rel="stylesheet" href="/css/price.css" type="text/css">
 <?php
+?>
+
+<div class="plans">
+<?php
 foreach ($data['plans'] as $plan) {
     ?>
-    <div class="plan">
+    <div class="plan text-center">
     <h3 class="plan-title"><?= $plan['title'] ?></h3>
     <p class="plan-price"><?= $plan['price'] ?><span class="plan-unit"><?= $plan['circle'] ?></span></p>
     <ul class="plan-features">
@@ -26,3 +30,4 @@ foreach ($data['plans'] as $plan) {
     </div><?php
 }
 ?>
+</div>

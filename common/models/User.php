@@ -226,9 +226,9 @@ class User extends ActiveRecord implements IdentityInterface
         return true;
     }
 
-    public function getUserOwnedServer($id){
+    public static function getUserOwnedServer($id){
         return User::find()
-            ->select(['id','username','owner_id'])
+            ->select(['owner_id'])
             ->with('server')
             ->where(['id' => $id])
             ->asArray()->one();

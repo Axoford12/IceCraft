@@ -48,7 +48,6 @@ class DepositForm extends Model
      */
     public function startPay($user_id){
         $model = new PayModel();
-        $web_root = \Yii::$app->params['IceConfig']['webRoot'];
         $pay_data = $model->startPay($this->getMoney($this->money),
             Url::to(['pay/return'],true), Url::to(['pay/notify'],true));//发起支付
         $order = new Order();
